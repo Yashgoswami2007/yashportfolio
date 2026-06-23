@@ -4,9 +4,9 @@ import { useRef, useState, useEffect } from "react";
 import robotImg from "@/assets/robot.png";
 import heroImg from "@/assets/hero.jpg";
 import projFusionnet from "@/assets/proj-fusionnet.jpg";
-import projAegis from "@/assets/proj-aegis.jpg";
-import projRaven from "@/assets/proj-raven.jpg";
-import projXenutron from "@/assets/proj-xenutron.jpg";
+import projAegis from "@/assets/proj-aegis.png";
+import projRaven from "@/assets/proj-raven.png";
+import projXenutron from "@/assets/proj-xenutron.png";
 import projMoodDoctor from "@/assets/proj-mooddoctor.jpg";
 import projVaibhav from "@/assets/vaibhav.png";
 import projYashPort from "@/assets/yash-port.png";
@@ -146,7 +146,7 @@ const PROJECTS: Project[] = [
   },
   {
     code: "W-05",
-    title: "REACT + SUPABASE",
+    title: "SCHOOL WEBSITE",
     tag: "Full-Stack · Realtime",
     blurb:
       "Full-stack web application with authentication, database integration, and real-time backend services.",
@@ -579,9 +579,8 @@ function CategoryToggle({
               role="tab"
               aria-selected={active}
               onClick={() => onChange(o.id)}
-              className={`relative px-5 py-2 transition-colors ${
-                active ? "text-paper" : "text-ink hover:text-rust"
-              }`}
+              className={`relative px-5 py-2 transition-colors ${active ? "text-paper" : "text-ink hover:text-rust"
+                }`}
             >
               {active && (
                 <motion.span
