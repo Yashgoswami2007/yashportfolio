@@ -227,6 +227,7 @@ function TopBar() {
           <a href="#dossier" className="hover:text-rust">Dossier</a>
           <a href="#projects" className="hover:text-rust">Projects</a>
           <a href="#skills" className="hover:text-rust">Skills</a>
+          <a href="#certifications" className="hover:text-rust">Certs</a>
           <a href="#contact" className="hover:text-rust">Contact</a>
         </nav>
         <span className="shrink-0 text-muted-foreground">{t || "––:––:–– UTC"}</span>
