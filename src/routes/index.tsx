@@ -8,6 +8,11 @@ import projAegis from "@/assets/proj-aegis.jpg";
 import projRaven from "@/assets/proj-raven.jpg";
 import projXenutron from "@/assets/proj-xenutron.jpg";
 import projMoodDoctor from "@/assets/proj-mooddoctor.jpg";
+import projVaibhav from "@/assets/vaibhav.png";
+import projYashPort from "@/assets/yash-port.png";
+import projSecondSoul from "@/assets/secondsoul.png";
+import projSchool from "@/assets/school.png";
+import projThisPortfolio from "@/assets/this-portfolio.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -103,17 +108,19 @@ const PROJECTS: Project[] = [
       "Modern personal portfolio website with responsive layouts, clean UI, and optimized performance.",
     stack: ["HTML", "CSS", "JavaScript"],
     category: "web",
+    image: projVaibhav,
     link: "https://vaibhav-portfolio.saturn2007km-676.workers.dev/",
   },
   {
     code: "W-02",
-    title: "CLIENT DELIVERY",
-    tag: "Client · Delivery",
+    title: "THIS PORTFOLIO",
+    tag: "Dossier · Interactive",
     blurb:
-      "Custom website built and delivered for a client with a focus on usability, responsiveness, and modern design.",
-    stack: ["React", "Responsive Design", "Frontend Development"],
+      "This retro-futurist AI engineer dossier portfolio. Built with modern framework architectures, visual micro-animations, and Cloudflare deployment.",
+    stack: ["React", "TypeScript", "Vite", "TanStack Router", "Framer Motion"],
     category: "web",
-    link: "https://1drv.ms/v/c/142c49342bccb667/IQAE1Qbo65guSK6aRWFnoYgUAV2mxpJzxrf1OrrBbkVKv0w",
+    image: projThisPortfolio,
+    link: "#hero",
   },
   {
     code: "W-03",
@@ -123,6 +130,7 @@ const PROJECTS: Project[] = [
       "Personal portfolio website showcasing projects, skills, and technical experience.",
     stack: ["React", "TypeScript", "Tailwind CSS"],
     category: "web",
+    image: projYashPort,
     link: "https://yash-goswami-portfolio.netlify.app/",
   },
   {
@@ -133,6 +141,7 @@ const PROJECTS: Project[] = [
       "Modern e-commerce website featuring product browsing, responsive design, and a polished shopping experience.",
     stack: ["React", "E-Commerce", "UI/UX"],
     category: "web",
+    image: projSecondSoul,
     link: "https://www.linkedin.com/posts/yash-goswami-551590374_delivered-another-modern-ecommerce-website-activity-7452282291181199360-sLdI",
   },
   {
@@ -143,6 +152,7 @@ const PROJECTS: Project[] = [
       "Full-stack web application with authentication, database integration, and real-time backend services.",
     stack: ["React", "Supabase", "Authentication"],
     category: "web",
+    image: projSchool,
     link: "https://www.linkedin.com/posts/yash-goswami-551590374_webdevelopment-reactjs-supabase-activity-7457095295819063296-mIpt",
   },
 ];
@@ -246,7 +256,7 @@ function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} className="relative h-screen min-h-[640px] w-full overflow-hidden border-b-2 border-ink">
+    <section ref={ref} id="hero" className="relative h-screen min-h-[640px] w-full overflow-hidden border-b-2 border-ink">
       <motion.div style={{ y, scale }} className="absolute -top-[10%] h-[120%] w-full">
         <img
           src={heroImg}
@@ -528,12 +538,14 @@ function ProjectPlate({ p, i }: { p: Project; i: number }) {
         {p.link && (
           <a
             href={p.link}
-            target="_blank"
-            rel="noopener noreferrer"
+            target={p.link.startsWith("#") ? undefined : "_blank"}
+            rel={p.link.startsWith("#") ? undefined : "noopener noreferrer"}
             className="group mt-6 inline-flex w-fit items-center gap-2 border-2 border-ink bg-ink px-4 py-3 font-mono text-[11px] uppercase tracking-[0.25em] text-paper transition-colors hover:bg-rust hover:border-rust"
           >
             Visit project
-            <span className="transition-transform group-hover:translate-x-1">↗</span>
+            <span className="transition-transform group-hover:translate-x-1">
+              {p.link.startsWith("#") ? "▸" : "↗"}
+            </span>
           </a>
         )}
       </div>
