@@ -726,23 +726,25 @@ function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: (i % 2) * 0.08 }}
-              className="relative bg-card p-6 sm:p-8"
+              whileHover={{ y: -6, scale: 1.01 }}
+              className="group relative cursor-default bg-card p-6 transition-colors duration-300 hover:bg-paper sm:p-8"
             >
               <Rivet className="top-2 left-2" />
               <Rivet className="top-2 right-2" />
               <Rivet className="bottom-2 left-2" />
               <Rivet className="bottom-2 right-2" />
+              <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 [background:repeating-linear-gradient(0deg,rgba(200,72,36,0.04)_0_1px,transparent_1px_4px)]" />
               <div className="flex items-center justify-between border-b-2 border-ink pb-2 font-mono text-[10px] uppercase tracking-[0.25em]">
                 <span>Cert № {String(i + 1).padStart(3, "0")}</span>
-                <span className="text-rust">● Verified</span>
+                <span className="text-rust transition-colors group-hover:text-ink">● Verified</span>
               </div>
-              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.3em] text-rust">
+              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.3em] text-rust transition-colors group-hover:text-ink">
                 {c.issuer}
               </p>
-              <h3 className="mt-2 font-display text-2xl font-black uppercase leading-tight sm:text-3xl">
+              <h3 className="mt-2 font-display text-2xl font-black uppercase leading-tight transition-colors sm:text-3xl">
                 {c.title}
               </h3>
-              <div className="mt-4 inline-block border border-ink bg-paper px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em]">
+              <div className="mt-4 inline-block border border-ink bg-paper px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] transition-all group-hover:border-rust group-hover:bg-rust group-hover:text-paper">
                 {c.meta}
               </div>
             </motion.div>
