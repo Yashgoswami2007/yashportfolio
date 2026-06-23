@@ -803,13 +803,15 @@ function Contact() {
 }
 
 function Index() {
+  const [cat, setCat] = useState<"ai" | "web">("ai");
   return (
     <main className="text-ink">
       <TopBar />
       <Hero />
       <Dossier />
-      <Projects />
-      <Skills />
+      <Projects cat={cat} setCat={setCat} />
+      <Skills cat={cat} />
+      <Certifications />
       <Contact />
     </main>
   );
