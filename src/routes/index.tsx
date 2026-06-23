@@ -179,6 +179,7 @@ const CERTIFICATIONS = [
   { issuer: "Google", title: "Data Analytics Professional Certificate & AI Essentials", meta: "Professional" },
   { issuer: "Machine Learning A-Z", title: "AI, Python & ChatGPT (2026)", meta: "Specialization" },
   { issuer: "HP", title: "Introduction to Artificial Intelligence", meta: "Foundations" },
+  { issuer: "Future Signals", title: "More to achieve", meta: "Ongoing" },
 ];
 
 function CornerBrackets() {
@@ -240,13 +241,13 @@ function TopBar() {
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} className="relative h-[92vh] min-h-[640px] w-full overflow-hidden border-b-2 border-ink">
-      <motion.div style={{ y, scale }} className="absolute inset-0">
+    <section ref={ref} className="relative h-screen min-h-[640px] w-full overflow-hidden border-b-2 border-ink">
+      <motion.div style={{ y, scale }} className="absolute -top-[10%] h-[120%] w-full">
         <img
           src={heroImg}
           alt="Astronaut beneath a giant orange planet"
@@ -254,7 +255,6 @@ function Hero() {
           height={1080}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-paper via-paper/10 to-transparent" />
         <div className="absolute inset-0 mix-blend-multiply opacity-30 [background:repeating-linear-gradient(0deg,rgba(26,24,20,0.25)_0_1px,transparent_1px_3px)]" />
       </motion.div>
 
@@ -302,7 +302,7 @@ function Hero() {
             transition={{ delay: 1.2, duration: 0.6 }}
             className="mt-6 grid gap-6 sm:grid-cols-[1.4fr_1fr] sm:items-end"
           >
-            <p className="max-w-xl font-serif text-base leading-relaxed text-paper sm:text-xl">
+            <p className="max-w-xl font-serif text-base leading-relaxed text-paper sm:text-xl backdrop-blur-md bg-ink/40 p-4 border border-paper/20">
               <span className="font-mono text-xs uppercase tracking-widest text-rust">
                 Classification —{" "}
               </span>
