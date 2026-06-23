@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence, LayoutGroup } from "motion/react";
 import { useRef, useState, useEffect } from "react";
 import robotImg from "@/assets/robot.png";
 import heroImg from "@/assets/hero.jpg";
@@ -33,7 +33,18 @@ export const Route = createFileRoute("/")({
 
 const NAME = "YASH GOSWAMI".split("");
 
-const PROJECTS = [
+type Project = {
+  code: string;
+  title: string;
+  tag: string;
+  blurb: string;
+  stack: string[];
+  category: "ai" | "web";
+  image?: string;
+  link?: string;
+};
+
+const PROJECTS: Project[] = [
   {
     code: "P-01",
     title: "FUSIONNET",
@@ -41,6 +52,7 @@ const PROJECTS = [
     blurb:
       "Privacy-preserving federated training mesh. Compact LLMs trained across nodes without leaking a byte of raw data.",
     stack: ["PyTorch", "Flower", "Differential Privacy"],
+    category: "ai",
     image: projFusionnet,
   },
   {
@@ -50,6 +62,7 @@ const PROJECTS = [
     blurb:
       "Autonomous threat-response operating system. Multi-agent perimeter scanning the wire 24/7, escalating on anomalies.",
     stack: ["LangGraph", "FastAPI", "PPO"],
+    category: "ai",
     image: projAegis,
   },
   {
@@ -59,6 +72,7 @@ const PROJECTS = [
     blurb:
       "Long-range OSINT bird. Crawls signals, distills intent, and reports back as structured intelligence dossiers.",
     stack: ["LLMs", "Vector DB", "LoRA"],
+    category: "ai",
     image: projRaven,
   },
   {
@@ -68,6 +82,7 @@ const PROJECTS = [
     blurb:
       "Multi-agent swarm simulator for coordinated drone behavior, trained with reinforcement learning in custom envs.",
     stack: ["RL", "Gymnasium", "JAX"],
+    category: "ai",
     image: projXenutron,
   },
   {
@@ -77,9 +92,60 @@ const PROJECTS = [
     blurb:
       "Empathy-tuned LLM companion for mood tracking and CBT-style reflection. Soft on the user, strict on privacy.",
     stack: ["LLM", "RAG", "Edge"],
+    category: "ai",
     image: projMoodDoctor,
   },
-] as const;
+  {
+    code: "W-01",
+    title: "VAIBHAV PORTFOLIO",
+    tag: "Portfolio · Frontend",
+    blurb:
+      "Modern personal portfolio website with responsive layouts, clean UI, and optimized performance.",
+    stack: ["HTML", "CSS", "JavaScript"],
+    category: "web",
+    link: "https://vaibhav-portfolio.saturn2007km-676.workers.dev/",
+  },
+  {
+    code: "W-02",
+    title: "CLIENT DELIVERY",
+    tag: "Client · Delivery",
+    blurb:
+      "Custom website built and delivered for a client with a focus on usability, responsiveness, and modern design.",
+    stack: ["React", "Responsive Design", "Frontend Development"],
+    category: "web",
+    link: "https://1drv.ms/v/c/142c49342bccb667/IQAE1Qbo65guSK6aRWFnoYgUAV2mxpJzxrf1OrrBbkVKv0w",
+  },
+  {
+    code: "W-03",
+    title: "YASH PORTFOLIO",
+    tag: "Portfolio · Showcase",
+    blurb:
+      "Personal portfolio website showcasing projects, skills, and technical experience.",
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+    category: "web",
+    link: "https://yash-goswami-portfolio.netlify.app/",
+  },
+  {
+    code: "W-04",
+    title: "E-COMMERCE PLATFORM",
+    tag: "Commerce · Storefront",
+    blurb:
+      "Modern e-commerce website featuring product browsing, responsive design, and a polished shopping experience.",
+    stack: ["React", "E-Commerce", "UI/UX"],
+    category: "web",
+    link: "https://www.linkedin.com/posts/yash-goswami-551590374_delivered-another-modern-ecommerce-website-activity-7452282291181199360-sLdI",
+  },
+  {
+    code: "W-05",
+    title: "REACT + SUPABASE",
+    tag: "Full-Stack · Realtime",
+    blurb:
+      "Full-stack web application with authentication, database integration, and real-time backend services.",
+    stack: ["React", "Supabase", "Authentication"],
+    category: "web",
+    link: "https://www.linkedin.com/posts/yash-goswami-551590374_webdevelopment-reactjs-supabase-activity-7457095295819063296-mIpt",
+  },
+];
 
 const SKILLS = [
   { group: "Models", items: ["LLMs", "LoRA / QLoRA", "Diffusion", "Compact LMs"] },
@@ -370,7 +436,7 @@ function Dossier() {
 }
 
 /* ---------- PROJECTS: big alternating plates ---------- */
-function ProjectPlate({ p, i }: { p: (typeof PROJECTS)[number]; i: number }) {
+function ProjectPlate({ p, i }: { p: Project; i: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
@@ -379,6 +445,7 @@ function ProjectPlate({ p, i }: { p: (typeof PROJECTS)[number]; i: number }) {
   return (
     <motion.article
       ref={ref}
+      layout
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -387,15 +454,28 @@ function ProjectPlate({ p, i }: { p: (typeof PROJECTS)[number]; i: number }) {
     >
       <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
         <div className="group relative overflow-hidden border-2 border-ink bg-ink">
-          <motion.img
-            style={{ y }}
-            src={p.image}
-            alt={p.title}
-            width={1280}
-            height={960}
-            loading="lazy"
-            className="aspect-[4/3] w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-100"
-          />
+          {p.image ? (
+            <motion.img
+              style={{ y }}
+              src={p.image}
+              alt={p.title}
+              width={1280}
+              height={960}
+              loading="lazy"
+              className="aspect-[4/3] w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-100"
+            />
+          ) : (
+            <motion.div
+              style={{ y }}
+              className="relative flex aspect-[4/3] w-full scale-110 items-center justify-center overflow-hidden bg-ink transition-transform duration-700 group-hover:scale-100"
+            >
+              <div className="absolute inset-0 [background:repeating-linear-gradient(135deg,rgba(200,80,30,0.18)_0_2px,transparent_2px_18px)]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-rust/30 via-transparent to-steel/40" />
+              <span className="relative font-display text-[clamp(3rem,10vw,7rem)] font-black uppercase tracking-tight text-paper/90 mix-blend-difference">
+                {p.title.split(" ")[0]}
+              </span>
+            </motion.div>
+          )}
           <div className="pointer-events-none absolute inset-0 mix-blend-multiply opacity-20 [background:repeating-linear-gradient(0deg,rgba(26,24,20,0.4)_0_1px,transparent_1px_3px)]" />
           <div className="absolute top-3 left-3 border border-paper/70 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-paper">
             {p.code} · {p.tag}
@@ -417,16 +497,75 @@ function ProjectPlate({ p, i }: { p: (typeof PROJECTS)[number]; i: number }) {
             <span key={s} className="border border-ink bg-paper px-2 py-1">{s}</span>
           ))}
         </div>
+        {p.link && (
+          <a
+            href={p.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-6 inline-flex w-fit items-center gap-2 border-2 border-ink bg-ink px-4 py-3 font-mono text-[11px] uppercase tracking-[0.25em] text-paper transition-colors hover:bg-rust hover:border-rust"
+          >
+            Visit project
+            <span className="transition-transform group-hover:translate-x-1">↗</span>
+          </a>
+        )}
       </div>
     </motion.article>
   );
 }
 
+function CategoryToggle({
+  value,
+  onChange,
+}: {
+  value: "ai" | "web";
+  onChange: (v: "ai" | "web") => void;
+}) {
+  const options: { id: "ai" | "web"; label: string }[] = [
+    { id: "ai", label: "AI" },
+    { id: "web", label: "Web" },
+  ];
+  return (
+    <LayoutGroup id="cat-toggle">
+      <div
+        role="tablist"
+        aria-label="Project category"
+        className="relative inline-flex items-center gap-1 border-2 border-ink bg-paper p-1 font-mono text-xs uppercase tracking-[0.25em]"
+      >
+        {options.map((o) => {
+          const active = value === o.id;
+          return (
+            <button
+              key={o.id}
+              role="tab"
+              aria-selected={active}
+              onClick={() => onChange(o.id)}
+              className={`relative px-5 py-2 transition-colors ${
+                active ? "text-paper" : "text-ink hover:text-rust"
+              }`}
+            >
+              {active && (
+                <motion.span
+                  layoutId="cat-toggle-pill"
+                  className="absolute inset-0 bg-ink"
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                />
+              )}
+              <span className="relative">{o.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </LayoutGroup>
+  );
+}
+
 function Projects() {
+  const [cat, setCat] = useState<"ai" | "web">("ai");
+  const filtered = PROJECTS.filter((p) => p.category === cat);
   return (
     <section id="projects" className="border-b-2 border-ink bg-paper">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="flex items-baseline justify-between gap-4 border-b-2 border-ink py-10">
+        <div className="flex flex-wrap items-baseline justify-between gap-4 border-b-2 border-ink py-10">
           <div className="flex items-baseline gap-4">
             <span className="font-mono text-xs uppercase tracking-[0.3em] text-rust">§ 03</span>
             <h2 className="font-display text-4xl font-black uppercase tracking-wider sm:text-6xl">
@@ -434,12 +573,28 @@ function Projects() {
             </h2>
           </div>
           <span className="hidden font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground sm:block">
-            {PROJECTS.length.toString().padStart(2, "0")} files · declassified
+            {filtered.length.toString().padStart(2, "0")} files · declassified
           </span>
         </div>
-        {PROJECTS.map((p, i) => (
-          <ProjectPlate key={p.code} p={p} i={i} />
-        ))}
+        <div className="flex items-center justify-between gap-4 py-6">
+          <CategoryToggle value={cat} onChange={setCat} />
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            Filter · {cat === "ai" ? "Artificial Intelligence" : "Web Development"}
+          </span>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cat}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.35 }}
+          >
+            {filtered.map((p, i) => (
+              <ProjectPlate key={p.code} p={p} i={i} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
