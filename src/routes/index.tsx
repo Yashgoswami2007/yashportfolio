@@ -33,7 +33,18 @@ export const Route = createFileRoute("/")({
 
 const NAME = "YASH GOSWAMI".split("");
 
-const PROJECTS = [
+type Project = {
+  code: string;
+  title: string;
+  tag: string;
+  blurb: string;
+  stack: string[];
+  category: "ai" | "web";
+  image?: string;
+  link?: string;
+};
+
+const PROJECTS: Project[] = [
   {
     code: "P-01",
     title: "FUSIONNET",
@@ -41,6 +52,7 @@ const PROJECTS = [
     blurb:
       "Privacy-preserving federated training mesh. Compact LLMs trained across nodes without leaking a byte of raw data.",
     stack: ["PyTorch", "Flower", "Differential Privacy"],
+    category: "ai",
     image: projFusionnet,
   },
   {
@@ -50,6 +62,7 @@ const PROJECTS = [
     blurb:
       "Autonomous threat-response operating system. Multi-agent perimeter scanning the wire 24/7, escalating on anomalies.",
     stack: ["LangGraph", "FastAPI", "PPO"],
+    category: "ai",
     image: projAegis,
   },
   {
@@ -59,6 +72,7 @@ const PROJECTS = [
     blurb:
       "Long-range OSINT bird. Crawls signals, distills intent, and reports back as structured intelligence dossiers.",
     stack: ["LLMs", "Vector DB", "LoRA"],
+    category: "ai",
     image: projRaven,
   },
   {
@@ -68,6 +82,7 @@ const PROJECTS = [
     blurb:
       "Multi-agent swarm simulator for coordinated drone behavior, trained with reinforcement learning in custom envs.",
     stack: ["RL", "Gymnasium", "JAX"],
+    category: "ai",
     image: projXenutron,
   },
   {
@@ -77,9 +92,60 @@ const PROJECTS = [
     blurb:
       "Empathy-tuned LLM companion for mood tracking and CBT-style reflection. Soft on the user, strict on privacy.",
     stack: ["LLM", "RAG", "Edge"],
+    category: "ai",
     image: projMoodDoctor,
   },
-] as const;
+  {
+    code: "W-01",
+    title: "VAIBHAV PORTFOLIO",
+    tag: "Portfolio · Frontend",
+    blurb:
+      "Modern personal portfolio website with responsive layouts, clean UI, and optimized performance.",
+    stack: ["HTML", "CSS", "JavaScript"],
+    category: "web",
+    link: "https://vaibhav-portfolio.saturn2007km-676.workers.dev/",
+  },
+  {
+    code: "W-02",
+    title: "CLIENT DELIVERY",
+    tag: "Client · Delivery",
+    blurb:
+      "Custom website built and delivered for a client with a focus on usability, responsiveness, and modern design.",
+    stack: ["React", "Responsive Design", "Frontend Development"],
+    category: "web",
+    link: "https://1drv.ms/v/c/142c49342bccb667/IQAE1Qbo65guSK6aRWFnoYgUAV2mxpJzxrf1OrrBbkVKv0w",
+  },
+  {
+    code: "W-03",
+    title: "YASH PORTFOLIO",
+    tag: "Portfolio · Showcase",
+    blurb:
+      "Personal portfolio website showcasing projects, skills, and technical experience.",
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+    category: "web",
+    link: "https://yash-goswami-portfolio.netlify.app/",
+  },
+  {
+    code: "W-04",
+    title: "E-COMMERCE PLATFORM",
+    tag: "Commerce · Storefront",
+    blurb:
+      "Modern e-commerce website featuring product browsing, responsive design, and a polished shopping experience.",
+    stack: ["React", "E-Commerce", "UI/UX"],
+    category: "web",
+    link: "https://www.linkedin.com/posts/yash-goswami-551590374_delivered-another-modern-ecommerce-website-activity-7452282291181199360-sLdI",
+  },
+  {
+    code: "W-05",
+    title: "REACT + SUPABASE",
+    tag: "Full-Stack · Realtime",
+    blurb:
+      "Full-stack web application with authentication, database integration, and real-time backend services.",
+    stack: ["React", "Supabase", "Authentication"],
+    category: "web",
+    link: "https://www.linkedin.com/posts/yash-goswami-551590374_webdevelopment-reactjs-supabase-activity-7457095295819063296-mIpt",
+  },
+];
 
 const SKILLS = [
   { group: "Models", items: ["LLMs", "LoRA / QLoRA", "Diffusion", "Compact LMs"] },
