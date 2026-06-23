@@ -147,12 +147,39 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const SKILLS = [
+const SKILLS_AI = [
   { group: "Models", items: ["LLMs", "LoRA / QLoRA", "Diffusion", "Compact LMs"] },
   { group: "Systems", items: ["Federated Learning", "Multi-Agent", "RL / PPO", "RAG"] },
   { group: "Stack", items: ["PyTorch", "LangGraph", "FastAPI", "Hugging Face"] },
   { group: "Ops", items: ["Docker", "Postgres", "Vector DBs", "Edge Runtimes"] },
 ] as const;
+
+const SKILLS_WEB = [
+  { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "UI/UX"] },
+  { group: "Full Stack", items: ["Supabase", "REST APIs", "Authentication", "Server Actions", "Real-Time Apps"] },
+  { group: "Data", items: ["PostgreSQL", "Database Design", "Caching", "Data Modeling", "Storage"] },
+  { group: "Production", items: ["Docker", "Vercel", "Cloudflare", "CI/CD", "Analytics"] },
+] as const;
+
+const MARQUEE_AI = [
+  "LLMs", "Federated Learning", "Multi-Agent", "PPO", "PyTorch", "LangGraph", "FastAPI",
+  "LoRA", "RAG", "Diffusion", "Vector DBs", "Edge", "JAX", "Hugging Face",
+];
+
+const MARQUEE_WEB = [
+  "React", "TypeScript", "Next.js", "MongoDB", "Supabase", "Tailwind CSS",
+  "Node.js", "Vercel", "REST APIs", "PostgreSQL", "Cloudflare", "Framer Motion",
+];
+
+const CERTIFICATIONS = [
+  { issuer: "JPMorgan Chase", title: "Software Engineering Job Simulation", meta: "Forage" },
+  { issuer: "Forge", title: "Job Simulation Certificate", meta: "Industry Sim" },
+  { issuer: "Harvard University", title: "CS50 — Artificial Intelligence", meta: "11 Projects Completed" },
+  { issuer: "Anthropic", title: "AI Fluency · Claude Code in Action · Claude 101", meta: "Framework" },
+  { issuer: "Google", title: "Data Analytics Professional Certificate & AI Essentials", meta: "Professional" },
+  { issuer: "Machine Learning A-Z", title: "AI, Python & ChatGPT (2026)", meta: "Specialization" },
+  { issuer: "HP", title: "Introduction to Artificial Intelligence", meta: "Foundations" },
+];
 
 function CornerBrackets() {
   return (
