@@ -147,12 +147,39 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const SKILLS = [
+const SKILLS_AI = [
   { group: "Models", items: ["LLMs", "LoRA / QLoRA", "Diffusion", "Compact LMs"] },
   { group: "Systems", items: ["Federated Learning", "Multi-Agent", "RL / PPO", "RAG"] },
   { group: "Stack", items: ["PyTorch", "LangGraph", "FastAPI", "Hugging Face"] },
   { group: "Ops", items: ["Docker", "Postgres", "Vector DBs", "Edge Runtimes"] },
 ] as const;
+
+const SKILLS_WEB = [
+  { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "UI/UX"] },
+  { group: "Full Stack", items: ["Supabase", "REST APIs", "Authentication", "Server Actions", "Real-Time Apps"] },
+  { group: "Data", items: ["PostgreSQL", "Database Design", "Caching", "Data Modeling", "Storage"] },
+  { group: "Production", items: ["Docker", "Vercel", "Cloudflare", "CI/CD", "Analytics"] },
+] as const;
+
+const MARQUEE_AI = [
+  "LLMs", "Federated Learning", "Multi-Agent", "PPO", "PyTorch", "LangGraph", "FastAPI",
+  "LoRA", "RAG", "Diffusion", "Vector DBs", "Edge", "JAX", "Hugging Face",
+];
+
+const MARQUEE_WEB = [
+  "React", "TypeScript", "Next.js", "MongoDB", "Supabase", "Tailwind CSS",
+  "Node.js", "Vercel", "REST APIs", "PostgreSQL", "Cloudflare", "Framer Motion",
+];
+
+const CERTIFICATIONS = [
+  { issuer: "JPMorgan Chase", title: "Software Engineering Job Simulation", meta: "Forage" },
+  { issuer: "Forge", title: "Job Simulation Certificate", meta: "Industry Sim" },
+  { issuer: "Harvard University", title: "CS50 — Artificial Intelligence", meta: "11 Projects Completed" },
+  { issuer: "Anthropic", title: "AI Fluency · Claude Code in Action · Claude 101", meta: "Framework" },
+  { issuer: "Google", title: "Data Analytics Professional Certificate & AI Essentials", meta: "Professional" },
+  { issuer: "Machine Learning A-Z", title: "AI, Python & ChatGPT (2026)", meta: "Specialization" },
+  { issuer: "HP", title: "Introduction to Artificial Intelligence", meta: "Foundations" },
+];
 
 function CornerBrackets() {
   return (
@@ -200,6 +227,7 @@ function TopBar() {
           <a href="#dossier" className="hover:text-rust">Dossier</a>
           <a href="#projects" className="hover:text-rust">Projects</a>
           <a href="#skills" className="hover:text-rust">Skills</a>
+          <a href="#certifications" className="hover:text-rust">Certs</a>
           <a href="#contact" className="hover:text-rust">Contact</a>
         </nav>
         <span className="shrink-0 text-muted-foreground">{t || "––:––:–– UTC"}</span>
@@ -559,8 +587,7 @@ function CategoryToggle({
   );
 }
 
-function Projects() {
-  const [cat, setCat] = useState<"ai" | "web">("ai");
+function Projects({ cat, setCat }: { cat: "ai" | "web"; setCat: (v: "ai" | "web") => void }) {
   const filtered = PROJECTS.filter((p) => p.category === cat);
   return (
     <section id="projects" className="border-b-2 border-ink bg-paper">
@@ -601,15 +628,13 @@ function Projects() {
 }
 
 /* ---------- SKILLS: marquee + grid ---------- */
-function Marquee() {
-  const items = [
-    "LLMs", "Federated Learning", "Multi-Agent", "PPO", "PyTorch", "LangGraph", "FastAPI",
-    "LoRA", "RAG", "Diffusion", "Vector DBs", "Edge", "JAX", "Hugging Face",
-  ];
+function Marquee({ cat }: { cat: "ai" | "web" }) {
+  const items = cat === "ai" ? MARQUEE_AI : MARQUEE_WEB;
   const loop = [...items, ...items];
   return (
     <div className="overflow-hidden border-y-2 border-ink bg-ink py-4">
       <motion.div
+        key={cat}
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         className="flex gap-10 whitespace-nowrap font-display text-5xl font-black uppercase tracking-tight text-paper sm:text-7xl"
@@ -625,39 +650,101 @@ function Marquee() {
   );
 }
 
-function Skills() {
+function Skills({ cat }: { cat: "ai" | "web" }) {
+  const data = cat === "ai" ? SKILLS_AI : SKILLS_WEB;
   return (
     <section id="skills" className="paper-grain border-b-2 border-ink">
-      <Marquee />
+      <Marquee cat={cat} />
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
         <div className="mb-10 flex items-baseline gap-4">
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-rust">§ 04</span>
           <h2 className="font-display text-4xl font-black uppercase tracking-wider sm:text-6xl">
             Instrumentation
           </h2>
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            / {cat === "ai" ? "AI Bays" : "Web Bays"}
+          </span>
         </div>
-        <div className="grid gap-px overflow-hidden border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-4">
-          {SKILLS.map((s, idx) => (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cat}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35 }}
+            className="grid gap-px overflow-hidden border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {data.map((s, idx) => (
+              <motion.div
+                key={s.group}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                className="bg-card p-6"
+              >
+                <div className="flex items-center justify-between border-b-2 border-ink pb-2 font-mono text-[10px] uppercase tracking-[0.25em]">
+                  <span>Bay {String(idx + 1).padStart(2, "0")}</span>
+                  <span className="text-rust">{s.group}</span>
+                </div>
+                <ul className="mt-4 space-y-2 font-display text-2xl font-black uppercase leading-tight">
+                  {s.items.map((it) => (
+                    <li key={it} className="flex items-center gap-2">
+                      <span className="inline-block h-2 w-2 bg-rust" />
+                      {it}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CERTIFICATIONS ---------- */
+function Certifications() {
+  return (
+    <section id="certifications" className="paper-grain border-b-2 border-ink py-20 sm:py-28">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-10 flex items-baseline gap-4">
+          <span className="font-mono text-xs uppercase tracking-[0.3em] text-rust">§ 05</span>
+          <h2 className="font-display text-4xl font-black uppercase tracking-wider sm:text-6xl">
+            Certifications
+          </h2>
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            / Stamped & Sealed
+          </span>
+        </div>
+        <div className="grid gap-px overflow-hidden border-2 border-ink bg-ink md:grid-cols-2">
+          {CERTIFICATIONS.map((c, i) => (
             <motion.div
-              key={s.group}
-              initial={{ opacity: 0, y: 20 }}
+              key={c.issuer + i}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="bg-card p-6"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: (i % 2) * 0.08 }}
+              className="relative bg-card p-6 sm:p-8"
             >
+              <Rivet className="top-2 left-2" />
+              <Rivet className="top-2 right-2" />
+              <Rivet className="bottom-2 left-2" />
+              <Rivet className="bottom-2 right-2" />
               <div className="flex items-center justify-between border-b-2 border-ink pb-2 font-mono text-[10px] uppercase tracking-[0.25em]">
-                <span>Bay {String(idx + 1).padStart(2, "0")}</span>
-                <span className="text-rust">{s.group}</span>
+                <span>Cert № {String(i + 1).padStart(3, "0")}</span>
+                <span className="text-rust">● Verified</span>
               </div>
-              <ul className="mt-4 space-y-2 font-display text-2xl font-black uppercase leading-tight">
-                {s.items.map((it) => (
-                  <li key={it} className="flex items-center gap-2">
-                    <span className="inline-block h-2 w-2 bg-rust" />
-                    {it}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.3em] text-rust">
+                {c.issuer}
+              </p>
+              <h3 className="mt-2 font-display text-2xl font-black uppercase leading-tight sm:text-3xl">
+                {c.title}
+              </h3>
+              <div className="mt-4 inline-block border border-ink bg-paper px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em]">
+                {c.meta}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -717,13 +804,15 @@ function Contact() {
 }
 
 function Index() {
+  const [cat, setCat] = useState<"ai" | "web">("ai");
   return (
     <main className="text-ink">
       <TopBar />
       <Hero />
       <Dossier />
-      <Projects />
-      <Skills />
+      <Projects cat={cat} setCat={setCat} />
+      <Skills cat={cat} />
+      <Certifications />
       <Contact />
     </main>
   );
