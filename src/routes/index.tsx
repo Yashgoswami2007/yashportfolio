@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence, LayoutGroup } from "motion/react";
 import { useRef, useState, useEffect } from "react";
-import robotImg from "@/assets/robot.png";
+import { RadioactiveContact } from "@/components/RadioactiveContact";
+import robotVideo from "@/assets/robot.mp4";
 import heroImg from "@/assets/hero.jpg";
 import projFusionnet from "@/assets/proj-fusionnet.jpg";
 import projAegis from "@/assets/proj-aegis.png";
@@ -157,28 +158,84 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const SKILLS_AI = [
-  { group: "Models", items: ["LLMs", "LoRA / QLoRA", "Diffusion", "Compact LMs"] },
-  { group: "Systems", items: ["Federated Learning", "Multi-Agent", "RL / PPO", "RAG"] },
-  { group: "Stack", items: ["PyTorch", "LangGraph", "FastAPI", "Hugging Face"] },
-  { group: "Ops", items: ["Docker", "Postgres", "Vector DBs", "Edge Runtimes"] },
-] as const;
+type SkillTab = {
+  id: string;
+  label: string;
+  marqueeItems: string[];
+  bays: { group: string; items: string[] }[];
+};
 
-const SKILLS_WEB = [
-  { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "UI/UX"] },
-  { group: "Full Stack", items: ["Supabase", "REST APIs", "Authentication", "Server Actions", "Real-Time Apps"] },
-  { group: "Data", items: ["PostgreSQL", "Database Design", "Caching", "Data Modeling", "Storage"] },
-  { group: "Production", items: ["Docker", "Vercel", "Cloudflare", "CI/CD", "Analytics"] },
-] as const;
-
-const MARQUEE_AI = [
-  "LLMs", "Federated Learning", "Multi-Agent", "PPO", "PyTorch", "LangGraph", "FastAPI",
-  "LoRA", "RAG", "Diffusion", "Vector DBs", "Edge", "JAX", "Hugging Face",
-];
-
-const MARQUEE_WEB = [
-  "React", "TypeScript", "Next.js", "MongoDB", "Supabase", "Tailwind CSS",
-  "Node.js", "Vercel", "REST APIs", "PostgreSQL", "Cloudflare", "Framer Motion",
+const SKILLS_TABS: SkillTab[] = [
+  {
+    id: "ai",
+    label: "AI / ML",
+    marqueeItems: ["Python", "Machine Learning", "Reinforcement Learning", "Federated Learning", "AI Agents", "LLM Integration", "Prompt Engineering", "Stable Baselines3", "Model Training"],
+    bays: [
+      { group: "Language & Frameworks", items: ["Python", "TensorFlow", "PyTorch", "scikit-learn"] },
+      { group: "ML / RL",    items: ["Machine Learning", "Reinforcement Learning", "Stable Baselines3", "Model Training & Eval"] },
+      { group: "AI Systems", items: ["Federated Learning", "AI Agent Development", "LLM Integration", "Prompt Engineering"] },
+    ],
+  },
+  {
+    id: "frontend",
+    label: "Frontend",
+    marqueeItems: ["HTML5", "CSS3", "JavaScript", "TypeScript", "React", "Responsive Design", "UI/UX Design"],
+    bays: [
+      { group: "Core",      items: ["HTML5", "CSS3", "JavaScript", "TypeScript"] },
+      { group: "Framework", items: ["React", "Responsive Web Design", "UI/UX Design"] },
+    ],
+  },
+  {
+    id: "backend",
+    label: "Backend",
+    marqueeItems: ["Node.js", "Supabase", "PostgreSQL", "REST API", "Cloud Deployment", "Serverless", "Auth Systems", "DB Design"],
+    bays: [
+      { group: "Full-Stack",   items: ["Full-Stack Web Dev", "REST API Development", "Authentication Systems", "Backend Architecture"] },
+      { group: "Data & Cloud", items: ["Database Design", "Node.js", "Supabase", "PostgreSQL", "Cloud Deployment", "Serverless Functions"] },
+    ],
+  },
+  {
+    id: "robotics",
+    label: "Robotics",
+    marqueeItems: ["Blender", "Robot Simulation", "Digital Twin", "Autonomous Systems", "Control Systems"],
+    bays: [
+      { group: "Simulation", items: ["Blender", "Robot Simulation", "Digital Twin Development"] },
+      { group: "Systems",   items: ["Autonomous Systems", "Control Systems"] },
+    ],
+  },
+  {
+    id: "devops",
+    label: "DevOps",
+    marqueeItems: ["Arch Linux", "NixOS", "Docker", "CI/CD", "Git", "GitHub"],
+    bays: [
+      { group: "Linux",     items: ["Arch Linux", "NixOS"] },
+      { group: "Toolchain", items: ["Docker", "CI/CD Basics", "Git & GitHub"] },
+    ],
+  },
+  {
+    id: "security",
+    label: "Security",
+    marqueeItems: ["Secure Auth", "API Security", "Security Auditing"],
+    bays: [
+      { group: "Practices", items: ["Secure Authentication", "API Security", "Security Auditing"] },
+    ],
+  },
+  {
+    id: "other",
+    label: "General",
+    marqueeItems: ["Data Structures", "System Design", "Technical Docs", "Research", "Prototyping"],
+    bays: [
+      { group: "Engineering", items: ["Data Structures & Algorithms", "System Design", "Technical Documentation", "Research & Prototyping"] },
+    ],
+  },
+  {
+    id: "tools",
+    label: "Tools",
+    marqueeItems: ["Python", "Git", "GitHub", "Blender", "VS Code", "Supabase", "Docker"],
+    bays: [
+      { group: "Toolchain", items: ["Python", "Git", "GitHub", "Blender", "VS Code", "Supabase", "Docker"] },
+    ],
+  },
 ];
 
 const CERTIFICATIONS = [
@@ -295,9 +352,25 @@ function Hero() {
                 ) : (
                   <motion.span
                     key={i}
-                    initial={{ opacity: 0, y: 60, rotateX: -40 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{ delay: 0.2 + i * 0.04, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+                    initial={{ opacity: 0, y: 60, rotateX: -40, color: "var(--paper)" }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0, 
+                      rotateX: 0,
+                      color: ["var(--paper)", "var(--rust)", "var(--paper)"]
+                    }}
+                    transition={{ 
+                      opacity: { delay: 0.2 + i * 0.04, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] },
+                      y: { delay: 0.2 + i * 0.04, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] },
+                      rotateX: { delay: 0.2 + i * 0.04, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] },
+                      color: { 
+                        delay: 2 + i * 1,
+                        duration: 1,
+                        repeat: Infinity,
+                        repeatDelay: NAME.length - 1,
+                        ease: "easeInOut"
+                      }
+                    }}
                     className="inline-block"
                   >
                     {ch}
@@ -415,12 +488,12 @@ function Dossier() {
                 <span>Model — YG-07 Mk.II</span>
                 <span className="text-rust">● LIVE</span>
               </div>
-              <img
-                src={robotImg}
-                alt="Retro-futurist robot mascot"
-                width={1024}
-                height={1024}
-                loading="lazy"
+              <video
+                src={robotVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="mx-auto block w-full"
               />
               <div className="grid grid-cols-3 gap-2 border-t-2 border-ink pt-3 font-mono text-[10px] uppercase tracking-[0.15em]">
@@ -639,15 +712,14 @@ function Projects({ cat, setCat }: { cat: "ai" | "web"; setCat: (v: "ai" | "web"
 }
 
 /* ---------- SKILLS: marquee + grid ---------- */
-function Marquee({ cat }: { cat: "ai" | "web" }) {
-  const items = cat === "ai" ? MARQUEE_AI : MARQUEE_WEB;
+function Marquee({ items, tabKey }: { items: string[]; tabKey: string }) {
   const loop = [...items, ...items];
   return (
     <div className="overflow-hidden border-y-2 border-ink bg-ink py-4">
       <motion.div
-        key={cat}
+        key={tabKey}
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
         className="flex gap-10 whitespace-nowrap font-display text-5xl font-black uppercase tracking-tight text-paper sm:text-7xl"
       >
         {loop.map((w, i) => (
@@ -661,53 +733,131 @@ function Marquee({ cat }: { cat: "ai" | "web" }) {
   );
 }
 
-function Skills({ cat }: { cat: "ai" | "web" }) {
-  const data = cat === "ai" ? SKILLS_AI : SKILLS_WEB;
+function SkillTabToggle({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <LayoutGroup id="skill-tab-toggle">
+      <div
+        role="tablist"
+        aria-label="Skill category"
+        className="flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.22em]"
+      >
+        {SKILLS_TABS.map((tab) => {
+          const active = value === tab.id;
+          return (
+            <button
+              key={tab.id}
+              role="tab"
+              id={`skill-tab-${tab.id}`}
+              aria-selected={active}
+              onClick={() => onChange(tab.id)}
+              className={`relative border-2 px-4 py-2 transition-all duration-200 ${
+                active
+                  ? "border-ink bg-ink text-paper"
+                  : "border-ink text-ink hover:border-rust hover:text-rust"
+              }`}
+            >
+              {active && (
+                <motion.span
+                  layoutId="skill-tab-pill"
+                  className="absolute inset-0 bg-ink"
+                  transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                />
+              )}
+              <span className="relative">{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </LayoutGroup>
+  );
+}
+
+function Skills() {
+  const [skillTab, setSkillTab] = useState<string>(SKILLS_TABS[0].id);
+  const tab = SKILLS_TABS.find((t) => t.id === skillTab) ?? SKILLS_TABS[0];
+
   return (
     <section id="skills" className="paper-grain border-b-2 border-ink">
-      <Marquee cat={cat} />
+      <Marquee items={tab.marqueeItems} tabKey={tab.id} />
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mb-10 flex items-baseline gap-4">
+        {/* Heading row */}
+        <div className="mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-rust">§ 04</span>
           <h2 className="font-display text-4xl font-black uppercase tracking-wider sm:text-6xl">
             Instrumentation
           </h2>
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-            / {cat === "ai" ? "AI Bays" : "Web Bays"}
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            / {tab.label} Bay
           </span>
         </div>
+
+        {/* Tab toggle */}
+        <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <SkillTabToggle value={skillTab} onChange={setSkillTab} />
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+            {tab.bays.reduce((acc, b) => acc + b.items.length, 0).toString().padStart(2, "0")} skills · active
+          </span>
+        </div>
+
+        {/* Bay grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={cat}
+            key={tab.id}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35 }}
-            className="grid gap-px overflow-hidden border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-4"
+            className="grid gap-px overflow-hidden border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3"
           >
-            {data.map((s, idx) => (
+            {tab.bays.map((bay, idx) => (
               <motion.div
-                key={s.group}
+                key={bay.group}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                transition={{ duration: 0.5, delay: idx * 0.07 }}
                 className="bg-card p-6"
               >
                 <div className="flex items-center justify-between border-b-2 border-ink pb-2 font-mono text-[10px] uppercase tracking-[0.25em]">
                   <span>Bay {String(idx + 1).padStart(2, "0")}</span>
-                  <span className="text-rust">{s.group}</span>
+                  <span className="text-rust">{bay.group}</span>
                 </div>
-                <ul className="mt-4 space-y-2 font-display text-2xl font-black uppercase leading-tight">
-                  {s.items.map((it) => (
-                    <li key={it} className="flex items-center gap-2">
-                      <span className="inline-block h-2 w-2 bg-rust" />
+                <ul className="mt-4 space-y-2">
+                  {bay.items.map((it) => (
+                    <li key={it} className="group flex items-center gap-2 font-display text-xl font-black uppercase leading-tight cursor-default transition-colors hover:text-rust sm:text-2xl">
+                      <span className="inline-block h-2 w-2 shrink-0 bg-rust transition-transform group-hover:scale-125" />
                       {it}
                     </li>
                   ))}
                 </ul>
               </motion.div>
             ))}
+
+            {/* Empty padding tiles to prevent "black box" gaps */}
+            {[...Array(Math.max((2 - (tab.bays.length % 2)) % 2, (3 - (tab.bays.length % 3)) % 3))].map((_, i) => {
+              const showSm = i < ((2 - (tab.bays.length % 2)) % 2);
+              const showLg = i < ((3 - (tab.bays.length % 3)) % 3);
+              let cls = "bg-card p-6 opacity-30 ";
+              
+              if (showSm && showLg) cls += "hidden sm:block";
+              else if (showSm && !showLg) cls += "hidden sm:block lg:hidden";
+              else if (!showSm && showLg) cls += "hidden lg:block";
+              
+              return (
+                <div key={`empty-${i}`} className={cls}>
+                  <div className="flex items-center justify-between border-b-2 border-ink pb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                    <span>Bay --</span>
+                    <span>Offline</span>
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -766,55 +916,6 @@ function Certifications() {
   );
 }
 
-/* ---------- CONTACT slab ---------- */
-function Contact() {
-  return (
-    <section id="contact" className="relative overflow-hidden bg-ink text-paper">
-      <div className="absolute inset-0 opacity-10 [background:repeating-linear-gradient(45deg,var(--paper)_0_1px,transparent_1px_14px)]" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-[1.4fr_1fr] lg:items-end">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-rust">§ 05 — Establish Comms</p>
-          <h2 className="mt-6 font-display text-6xl font-black uppercase leading-[0.85] sm:text-8xl lg:text-9xl">
-            Let's build <br />
-            something <span className="text-rust">radioactive.</span>
-          </h2>
-        </div>
-        <div className="space-y-4 font-mono text-sm uppercase tracking-[0.2em]">
-          <a
-            href="https://github.com/Yashgoswami2007"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between border-2 border-paper bg-paper px-5 py-4 text-ink transition-all hover:bg-rust hover:text-paper hover:border-rust"
-          >
-            <span>▸ Github / Yashgoswami2007</span>
-            <span className="transition-transform group-hover:translate-x-1">↗</span>
-          </a>
-          <a
-            href="#"
-            className="group flex items-center justify-between border-2 border-paper px-5 py-4 transition-all hover:bg-paper hover:text-ink"
-          >
-            <span>▸ Transmit signal</span>
-            <span>SOON</span>
-          </a>
-          <div className="border-2 border-paper/30 p-5 font-mono text-[11px] tracking-[0.25em]">
-            <div className="flex justify-between"><span>Frequency</span><span className="text-rust">108.5 MHz</span></div>
-            <div className="mt-2 flex justify-between"><span>Channel</span><span>YG-2007</span></div>
-            <div className="mt-2 flex justify-between"><span>Status</span><span className="text-rust">● Listening</span></div>
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-paper/20">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.3em] text-paper/60 sm:flex-row sm:justify-between sm:px-8">
-          <span>© MMXXVI · Atomic Labs Archive</span>
-          <span className="flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 bg-rust animate-pulse-dot" />
-            Transmission stable
-          </span>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function Index() {
   const [cat, setCat] = useState<"ai" | "web">("ai");
@@ -824,9 +925,9 @@ function Index() {
       <Hero />
       <Dossier />
       <Projects cat={cat} setCat={setCat} />
-      <Skills cat={cat} />
+      <Skills />
       <Certifications />
-      <Contact />
+      <RadioactiveContact />
     </main>
   );
 }
