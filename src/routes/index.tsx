@@ -4,16 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { RadioactiveContact } from "@/components/RadioactiveContact";
 import robotVideo from "@/assets/robot.mp4";
 import heroImg from "@/assets/hero.jpg";
-import projFusionnet from "@/assets/proj-fusionnet.jpg";
-import projAegis from "@/assets/proj-aegis.png";
-import projRaven from "@/assets/proj-raven.png";
-import projXenutron from "@/assets/proj-xenutron.png";
-import projMoodDoctor from "@/assets/proj-mooddoctor.jpg";
-import projVaibhav from "@/assets/vaibhav.png";
-import projYashPort from "@/assets/yash-port.png";
-import projSecondSoul from "@/assets/secondsoul.png";
-import projSchool from "@/assets/school.png";
-import projThisPortfolio from "@/assets/this-portfolio.png";
+import { Link } from "@tanstack/react-router";
+import { PROJECTS, type Project } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,124 +31,7 @@ export const Route = createFileRoute("/")({
 
 const NAME = "YASH GOSWAMI".split("");
 
-type Project = {
-  code: string;
-  title: string;
-  tag: string;
-  blurb: string;
-  stack: string[];
-  category: "ai" | "web";
-  image?: string;
-  link?: string;
-};
 
-const PROJECTS: Project[] = [
-  {
-    code: "P-01",
-    title: "FUSIONNET",
-    tag: "Federated · Distributed",
-    blurb:
-      "Privacy-preserving federated training mesh. Compact LLMs trained across nodes without leaking a byte of raw data.",
-    stack: ["PyTorch", "Flower", "Differential Privacy"],
-    category: "ai",
-    image: projFusionnet,
-  },
-  {
-    code: "P-02",
-    title: "A.E.G.I.S.",
-    tag: "Defense · Agents",
-    blurb:
-      "Autonomous threat-response operating system. Multi-agent perimeter scanning the wire 24/7, escalating on anomalies.",
-    stack: ["LangGraph", "FastAPI", "PPO"],
-    category: "ai",
-    image: projAegis,
-  },
-  {
-    code: "P-03",
-    title: "R.A.V.E.N.",
-    tag: "Recon · Intelligence",
-    blurb:
-      "Long-range OSINT bird. Crawls signals, distills intent, and reports back as structured intelligence dossiers.",
-    stack: ["LLMs", "Vector DB", "LoRA"],
-    category: "ai",
-    image: projRaven,
-  },
-  {
-    code: "P-04",
-    title: "XENUTRON",
-    tag: "Swarm · Simulation",
-    blurb:
-      "Multi-agent swarm simulator for coordinated drone behavior, trained with reinforcement learning in custom envs.",
-    stack: ["RL", "Gymnasium", "JAX"],
-    category: "ai",
-    image: projXenutron,
-  },
-  {
-    code: "P-05",
-    title: "MOOD DOCTOR",
-    tag: "Health · Conversational",
-    blurb:
-      "Empathy-tuned LLM companion for mood tracking and CBT-style reflection. Soft on the user, strict on privacy.",
-    stack: ["LLM", "RAG", "Edge"],
-    category: "ai",
-    image: projMoodDoctor,
-  },
-  {
-    code: "W-01",
-    title: "VAIBHAV PORTFOLIO",
-    tag: "Portfolio · Frontend",
-    blurb:
-      "Modern personal portfolio website with responsive layouts, clean UI, and optimized performance.",
-    stack: ["HTML", "CSS", "JavaScript"],
-    category: "web",
-    image: projVaibhav,
-    link: "https://vaibhav-portfolio.saturn2007km-676.workers.dev/",
-  },
-  {
-    code: "W-02",
-    title: "THIS PORTFOLIO",
-    tag: "Dossier · Interactive",
-    blurb:
-      "This retro-futurist AI engineer dossier portfolio. Built with modern framework architectures, visual micro-animations, and Cloudflare deployment.",
-    stack: ["React", "TypeScript", "Vite", "TanStack Router", "Framer Motion"],
-    category: "web",
-    image: projThisPortfolio,
-    link: "#hero",
-  },
-  {
-    code: "W-03",
-    title: "YASH PORTFOLIO",
-    tag: "Portfolio · Showcase",
-    blurb:
-      "Personal portfolio website showcasing projects, skills, and technical experience.",
-    stack: ["React", "TypeScript", "Tailwind CSS"],
-    category: "web",
-    image: projYashPort,
-    link: "https://yash-goswami-portfolio.netlify.app/",
-  },
-  {
-    code: "W-04",
-    title: "E-COMMERCE PLATFORM",
-    tag: "Commerce · Storefront",
-    blurb:
-      "Modern e-commerce website featuring product browsing, responsive design, and a polished shopping experience.",
-    stack: ["React", "E-Commerce", "UI/UX"],
-    category: "web",
-    image: projSecondSoul,
-    link: "https://www.linkedin.com/posts/yash-goswami-551590374_delivered-another-modern-ecommerce-website-activity-7452282291181199360-sLdI",
-  },
-  {
-    code: "W-05",
-    title: "SCHOOL WEBSITE",
-    tag: "Full-Stack · Realtime",
-    blurb:
-      "Full-stack web application with authentication, database integration, and real-time backend services.",
-    stack: ["React", "Supabase", "Authentication"],
-    category: "web",
-    image: projSchool,
-    link: "https://www.linkedin.com/posts/yash-goswami-551590374_webdevelopment-reactjs-supabase-activity-7457095295819063296-mIpt",
-  },
-];
 
 type SkillTab = {
   id: string;
@@ -564,37 +439,39 @@ function ProjectPlate({ p, i }: { p: Project; i: number }) {
       className="grid gap-6 border-b-2 border-ink py-16 last:border-b-0 lg:grid-cols-12 lg:gap-10 lg:py-24"
     >
       <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
-        <div className="group relative overflow-hidden border-2 border-ink bg-ink">
-          {p.image ? (
-            <motion.img
-              style={{ y }}
-              src={p.image}
-              alt={p.title}
-              width={1280}
-              height={960}
-              loading="lazy"
-              className="aspect-[4/3] w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-100"
-            />
-          ) : (
-            <motion.div
-              style={{ y }}
-              className="relative flex aspect-[4/3] w-full scale-110 items-center justify-center overflow-hidden bg-ink transition-transform duration-700 group-hover:scale-100"
-            >
-              <div className="absolute inset-0 [background:repeating-linear-gradient(135deg,rgba(200,80,30,0.18)_0_2px,transparent_2px_18px)]" />
-              <div className="absolute inset-0 bg-gradient-to-br from-rust/30 via-transparent to-steel/40" />
-              <span className="relative font-display text-[clamp(3rem,10vw,7rem)] font-black uppercase tracking-tight text-paper/90 mix-blend-difference">
-                {p.title.split(" ")[0]}
-              </span>
-            </motion.div>
-          )}
-          <div className="pointer-events-none absolute inset-0 mix-blend-multiply opacity-20 [background:repeating-linear-gradient(0deg,rgba(26,24,20,0.4)_0_1px,transparent_1px_3px)]" />
-          <div className="absolute top-3 left-3 border border-paper/70 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-paper">
-            {p.code} · {p.tag}
+        <Link to={`/project/${p.code}`} className="block h-full w-full cursor-pointer">
+          <div className="group relative overflow-hidden border-2 border-ink bg-ink">
+            {p.image ? (
+              <motion.img
+                style={{ y }}
+                src={p.image}
+                alt={p.title}
+                width={1280}
+                height={960}
+                loading="lazy"
+                className="aspect-[4/3] w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-100"
+              />
+            ) : (
+              <motion.div
+                style={{ y }}
+                className="relative flex aspect-[4/3] w-full scale-110 items-center justify-center overflow-hidden bg-ink transition-transform duration-700 group-hover:scale-100"
+              >
+                <div className="absolute inset-0 [background:repeating-linear-gradient(135deg,rgba(200,80,30,0.18)_0_2px,transparent_2px_18px)]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-rust/30 via-transparent to-steel/40" />
+                <span className="relative font-display text-[clamp(3rem,10vw,7rem)] font-black uppercase tracking-tight text-paper/90 mix-blend-difference">
+                  {p.title.split(" ")[0]}
+                </span>
+              </motion.div>
+            )}
+            <div className="pointer-events-none absolute inset-0 mix-blend-multiply opacity-20 [background:repeating-linear-gradient(0deg,rgba(26,24,20,0.4)_0_1px,transparent_1px_3px)]" />
+            <div className="absolute top-3 left-3 border border-paper/70 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-paper">
+              {p.code} · {p.tag}
+            </div>
+            <div className="absolute right-3 bottom-3 border border-paper/70 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-paper">
+              ● REC
+            </div>
           </div>
-          <div className="absolute right-3 bottom-3 border border-paper/70 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-paper">
-            ● REC
-          </div>
-        </div>
+        </Link>
       </div>
 
       <div className={`flex flex-col justify-center lg:col-span-5 ${reverse ? "lg:order-1" : ""}`}>
@@ -608,19 +485,22 @@ function ProjectPlate({ p, i }: { p: Project; i: number }) {
             <span key={s} className="border border-ink bg-paper px-2 py-1">{s}</span>
           ))}
         </div>
-        {p.link && (
-          <a
-            href={p.link}
-            target={p.link.startsWith("#") ? undefined : "_blank"}
-            rel={p.link.startsWith("#") ? undefined : "noopener noreferrer"}
-            className="group mt-6 inline-flex w-fit items-center gap-2 border-2 border-ink bg-ink px-4 py-3 font-mono text-[11px] uppercase tracking-[0.25em] text-paper transition-colors hover:bg-rust hover:border-rust"
-          >
-            Visit project
-            <span className="transition-transform group-hover:translate-x-1">
-              {p.link.startsWith("#") ? "▸" : "↗"}
-            </span>
-          </a>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+
+          {p.link && (
+            <a
+              href={p.link}
+              target={p.link.startsWith("#") ? undefined : "_blank"}
+              rel={p.link.startsWith("#") ? undefined : "noopener noreferrer"}
+              className="group mt-6 inline-flex w-fit items-center gap-2 border-2 border-ink bg-ink px-4 py-3 font-mono text-[11px] uppercase tracking-[0.25em] text-paper transition-colors hover:bg-rust hover:border-rust"
+            >
+              Visit project
+              <span className="transition-transform group-hover:translate-x-1">
+                {p.link.startsWith("#") ? "▸" : "↗"}
+              </span>
+            </a>
+          )}
+        </div>
       </div>
     </motion.article>
   );
