@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
+import rocketImg from "@/assets/rocket.webp";
 
 const DETERMINISTIC_RANDOM = [
   0.1, 0.8, 0.3, 0.6, 0.9, 0.2, 0.7, 0.4, 0.5, 0.85, 0.15, 0.95
@@ -7,12 +8,12 @@ const DETERMINISTIC_RANDOM = [
 
 function ExplodingLetter({ char, i, total, scrollYProgress }: { char: string, i: number, total: number, scrollYProgress: any }) {
   const rand = DETERMINISTIC_RANDOM[i % DETERMINISTIC_RANDOM.length];
-  
+
   // Spread letters outward in an arc above the text.
   // i=0 is left, i=total is right.
   const angle = (i / (total - 1)) * Math.PI - Math.PI / 2;
   const angleUp = angle * 0.9; // Narrow the arc slightly
-  
+
   const velocity = 30 + rand * 50; // Between 30 and 80 vw/vh
   const x_vw = Math.sin(angleUp) * velocity;
   const y_vh = -Math.cos(angleUp) * velocity; // negative is UP
@@ -25,10 +26,10 @@ function ExplodingLetter({ char, i, total, scrollYProgress }: { char: string, i:
   // 1.0: Settled at the bottom of the screen
   const lx = useTransform(scrollYProgress, [0.2, 0.4, 0.8, 1.0], ["0vw", `${x_vw}vw`, `${x_vw * 1.5}vw`, `${x_vw * 1.2}vw`]);
   const ly = useTransform(scrollYProgress, [0.2, 0.4, 0.8, 1.0], ["0vh", `${y_vh}vh`, "20vh", "80vh"]);
-  
+
   // Tumble effect
   const lrot = useTransform(scrollYProgress, [0.2, 1.0], ["0deg", `${(rand > 0.5 ? 1 : -1) * (360 + rand * 1440)}deg`]);
-  
+
   // Fade out eventually
   const lopacity = useTransform(scrollYProgress, [0.8, 1.0], [1, 0]);
 
@@ -57,12 +58,12 @@ export function RadioactiveContact() {
   });
 
   // Top level screen shake
-  const shakeX = useTransform(scrollYProgress, 
-    [0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3], 
+  const shakeX = useTransform(scrollYProgress,
+    [0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3],
     ["0px", "30px", "-30px", "20px", "-20px", "15px", "-15px", "10px", "-10px", "5px", "0px"]
   );
-  const shakeY = useTransform(scrollYProgress, 
-    [0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3], 
+  const shakeY = useTransform(scrollYProgress,
+    [0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3],
     ["0px", "-25px", "25px", "-15px", "15px", "-10px", "10px", "-5px", "5px", "-2px", "0px"]
   );
 
@@ -72,13 +73,13 @@ export function RadioactiveContact() {
   // Clean vs Charred Text crossfade
   const cleanOpacity = useTransform(scrollYProgress, [0.18, 0.2], [1, 0]);
   const charredOpacity = useTransform(scrollYProgress, [0.18, 0.2], [0, 1]);
-  
+
   // Incoming Missile
   // Starts far top-left, hits the word
   const missileX = useTransform(scrollYProgress, [0, 0.2], ["-80vw", "0vw"]);
   const missileY = useTransform(scrollYProgress, [0, 0.2], ["-80vh", "0vh"]);
   const missileOpacity = useTransform(scrollYProgress, [0, 0.19, 0.2, 0.21], [1, 1, 1, 0]);
-  
+
   // Explosion Flash
   const flashOpacity = useTransform(scrollYProgress, [0.19, 0.2, 0.25, 0.4], [0, 1, 1, 0]);
   const flashScale = useTransform(scrollYProgress, [0.19, 0.2, 0.4], [0.1, 20, 35]);
@@ -101,18 +102,18 @@ export function RadioactiveContact() {
   return (
     <section ref={containerRef} id="contact" className="relative h-[400vh] bg-ink text-paper">
       <div className="sticky top-0 h-screen overflow-hidden">
-        
+
         {/* Animated Background Grid */}
-        <motion.div 
-          style={{ opacity: bgOpacity }} 
-          className="absolute inset-0 [background:repeating-linear-gradient(45deg,var(--paper)_0_1px,transparent_1px_14px)]" 
+        <motion.div
+          style={{ opacity: bgOpacity }}
+          className="absolute inset-0 [background:repeating-linear-gradient(45deg,var(--paper)_0_1px,transparent_1px_14px)]"
         />
 
         <motion.div style={{ x: shakeX, y: shakeY }} className="relative mx-auto grid max-w-7xl h-full gap-10 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-[1.4fr_1fr] lg:items-end">
-          
+
           <div className="relative z-10 flex flex-col justify-center h-full">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-rust mb-6">§ 05 — Establish Comms</p>
-            
+
             <div className="relative w-full">
               {/* CLEAN TEXT */}
               <motion.div style={{ opacity: cleanOpacity }} className="absolute top-0 left-0 w-full">
@@ -130,36 +131,36 @@ export function RadioactiveContact() {
                   something <br />
                   <span className="opacity-0">radioactive.</span>
                 </h2>
-                
+
                 {/* Floating Ash particles - only visible after impact */}
                 <motion.div style={{ opacity: charredOpacity }} className="absolute inset-0 pointer-events-none">
-                   {[...Array(15)].map((_, i) => (
-                     <motion.div 
-                        key={i}
-                        animate={{ 
-                          y: [0, -100 - Math.random() * 200], 
-                          x: [(Math.random() - 0.5) * 100, (Math.random() - 0.5) * 200],
-                          opacity: [0, 0.8, 0],
-                          rotate: [0, Math.random() * 360]
-                        }}
-                        transition={{ 
-                          duration: 4 + Math.random() * 4, 
-                          repeat: Infinity, 
-                          delay: Math.random() * 5 
-                        }}
-                        className="absolute w-2 h-2 bg-stone-500 rounded-sm opacity-0 blur-[1px]"
-                        style={{
-                          left: `${20 + Math.random() * 60}%`,
-                          bottom: `${Math.random() * 20}%`
-                        }}
-                     />
-                   ))}
+                  {[...Array(15)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        y: [0, -100 - Math.random() * 200],
+                        x: [(Math.random() - 0.5) * 100, (Math.random() - 0.5) * 200],
+                        opacity: [0, 0.8, 0],
+                        rotate: [0, Math.random() * 360]
+                      }}
+                      transition={{
+                        duration: 4 + Math.random() * 4,
+                        repeat: Infinity,
+                        delay: Math.random() * 5
+                      }}
+                      className="absolute w-2 h-2 bg-stone-500 rounded-sm opacity-0 blur-[1px]"
+                      style={{
+                        left: `${20 + Math.random() * 60}%`,
+                        bottom: `${Math.random() * 20}%`
+                      }}
+                    />
+                  ))}
                 </motion.div>
               </motion.div>
 
               {/* CHROMATIC ABERRATION GHOST (for the "something" text during impact) */}
-              <motion.div 
-                style={{ opacity: aberrationOpacity, scale: aberrationScale }} 
+              <motion.div
+                style={{ opacity: aberrationOpacity, scale: aberrationScale }}
                 className="absolute top-0 left-0 w-full pointer-events-none mix-blend-screen text-[#0ff] [text-shadow:-4px_0_10px_#f00]"
               >
                 <h2 className="font-display text-6xl font-black uppercase leading-[0.85] sm:text-8xl lg:text-9xl opacity-50 blur-[2px]">
@@ -171,26 +172,22 @@ export function RadioactiveContact() {
               {/* EXPLODING WORD & IMPACT ZERO POINT */}
               <h2 className="absolute top-0 left-0 w-full font-display text-6xl font-black uppercase leading-[0.85] sm:text-8xl lg:text-9xl z-50 pointer-events-none">
                 <span className="opacity-0">Let's build <br />something <br /></span>
-                
+
                 <span className="relative inline-block">
                   {/* Explosion Origin (Center of "radioactive") */}
                   <div className="absolute top-1/2 left-1/2">
-                    
+
                     {/* The Incoming Missile */}
                     <motion.div
                       style={{
                         x: missileX,
                         y: missileY,
                         opacity: missileOpacity,
-                        rotate: "45deg" // Pointing down-right
+                        rotate: "90deg" // Pointing down-right
                       }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 z-40 w-40 h-6 rounded-full bg-paper flex items-center"
+                      className="absolute -translate-x-1/2 -translate-y-1/2 z-40 w-48 flex items-center justify-center"
                     >
-                      {/* Missile Head */}
-                      <div className="absolute right-0 w-8 h-8 bg-white rounded-full blur-[4px] [box-shadow:0_0_20px_10px_#fff]"></div>
-                      {/* Plasma Trail */}
-                      <div className="absolute right-6 w-[250px] h-4 bg-gradient-to-l from-white via-[#facc15] to-[#c8501e] blur-[6px] rounded-full"></div>
-                      <div className="absolute right-6 w-[150px] h-2 bg-white blur-[2px] rounded-full"></div>
+                      <img src={rocketImg} alt="Rocket" className="w-full h-auto object-contain [filter:drop-shadow(0_0_20px_rgba(250,204,21,0.6))]" />
                     </motion.div>
 
                     {/* Mushroom Cloud */}
